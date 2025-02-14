@@ -3,7 +3,7 @@
 
 services:
   api:
-    container_name: LibreChat
+    # container_name: LibreChat
     ports:
       - "${PORT}:${PORT}"
     depends_on:
@@ -26,16 +26,32 @@ services:
         target: /app/.env
       - ./images:/app/client/public/images
       - ./logs:/app/api/logs
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.<unique-name>.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.<unique-name>.entrypoints=websecure"
+      - "traefik.http.routers.<unique-name>.tls.certResolver=letsencrypt"
+      - "traefik.http.services.<unique-name>.loadbalancer.server.port=3000"
+    networks:
+      - dokploy-network
   mongodb:
-    container_name: chat-mongodb
+    # container_name: chat-mongodb
     image: mongo
     restart: always
     user: "${UID}:${GID}"
     volumes:
       - ./data-node:/data/db
     command: mongod --noauth
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.<unique-name>.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.<unique-name>.entrypoints=websecure"
+      - "traefik.http.routers.<unique-name>.tls.certResolver=letsencrypt"
+      - "traefik.http.services.<unique-name>.loadbalancer.server.port=3000"
+    networks:
+      - dokploy-network
   meilisearch:
-    container_name: chat-meilisearch
+    # container_name: chat-meilisearch
     image: getmeili/meilisearch:v1.12.3
     restart: always
     user: "${UID}:${GID}"
@@ -45,8 +61,16 @@ services:
       - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
     volumes:
       - ./meili_data_v1.12:/meili_data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.<unique-name>.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.<unique-name>.entrypoints=websecure"
+      - "traefik.http.routers.<unique-name>.tls.certResolver=letsencrypt"
+      - "traefik.http.services.<unique-name>.loadbalancer.server.port=3000"
+    networks:
+      - dokploy-network
   vectordb:
-    container_name: vectordb
+    # container_name: vectordb
     image: ankane/pgvector:latest
     environment:
       POSTGRES_DB: mydatabase
@@ -55,8 +79,16 @@ services:
     restart: always
     volumes:
       - pgdata2:/var/lib/postgresql/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.<unique-name>.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.<unique-name>.entrypoints=websecure"
+      - "traefik.http.routers.<unique-name>.tls.certResolver=letsencrypt"
+      - "traefik.http.services.<unique-name>.loadbalancer.server.port=3000"
+    networks:
+      - dokploy-network
   rag_api:
-    container_name: rag_api
+    # container_name: rag_api
     image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
     environment:
       - DB_HOST=vectordb
@@ -66,6 +98,18 @@ services:
       - vectordb
     env_file:
       - .env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.<unique-name>.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.<unique-name>.entrypoints=websecure"
+      - "traefik.http.routers.<unique-name>.tls.certResolver=letsencrypt"
+      - "traefik.http.services.<unique-name>.loadbalancer.server.port=3000"
+    networks:
+      - dokploy-network
 
 volumes:
   pgdata2:
+
+networks:
+  dokploy-network:
+    external: true
