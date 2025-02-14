@@ -28,10 +28,10 @@ services:
       - ./logs:/app/api/logs
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.<unique-name>.rule=Host(`your-domain.com`)"
-      - "traefik.http.routers.<unique-name>.entrypoints=websecure"
-      - "traefik.http.routers.<unique-name>.tls.certResolver=letsencrypt"
-      - "traefik.http.services.<unique-name>.loadbalancer.server.port=3000"
+      - "traefik.http.routers.librechat.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.librechat.entrypoints=websecure"
+      - "traefik.http.routers.librechat.tls.certResolver=letsencrypt"
+      - "traefik.http.services.librechat.loadbalancer.server.port=3000"
     networks:
       - dokploy-network
   mongodb:
@@ -44,10 +44,10 @@ services:
     command: mongod --noauth
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.<unique-name>.rule=Host(`your-domain.com`)"
-      - "traefik.http.routers.<unique-name>.entrypoints=websecure"
-      - "traefik.http.routers.<unique-name>.tls.certResolver=letsencrypt"
-      - "traefik.http.services.<unique-name>.loadbalancer.server.port=3000"
+      - "traefik.http.routers.mongo.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.mongo.entrypoints=websecure"
+      - "traefik.http.routers.mongo.tls.certResolver=letsencrypt"
+      - "traefik.http.services.mongo.loadbalancer.server.port=3000"
     networks:
       - dokploy-network
   meilisearch:
@@ -63,10 +63,10 @@ services:
       - ./meili_data_v1.12:/meili_data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.<unique-name>.rule=Host(`your-domain.com`)"
-      - "traefik.http.routers.<unique-name>.entrypoints=websecure"
-      - "traefik.http.routers.<unique-name>.tls.certResolver=letsencrypt"
-      - "traefik.http.services.<unique-name>.loadbalancer.server.port=3000"
+      - "traefik.http.routers.meilisearch.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.meilisearch.entrypoints=websecure"
+      - "traefik.http.routers.meilisearch.tls.certResolver=letsencrypt"
+      - "traefik.http.services.meilisearch.loadbalancer.server.port=3000"
     networks:
       - dokploy-network
   vectordb:
@@ -81,10 +81,10 @@ services:
       - pgdata2:/var/lib/postgresql/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.<unique-name>.rule=Host(`your-domain.com`)"
-      - "traefik.http.routers.<unique-name>.entrypoints=websecure"
-      - "traefik.http.routers.<unique-name>.tls.certResolver=letsencrypt"
-      - "traefik.http.services.<unique-name>.loadbalancer.server.port=3000"
+      - "traefik.http.routers.pgvector.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.pgvector.entrypoints=websecure"
+      - "traefik.http.routers.pgvector.tls.certResolver=letsencrypt"
+      - "traefik.http.services.pgvector.loadbalancer.server.port=3000"
     networks:
       - dokploy-network
   rag_api:
@@ -100,10 +100,10 @@ services:
       - .env
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.<unique-name>.rule=Host(`your-domain.com`)"
-      - "traefik.http.routers.<unique-name>.entrypoints=websecure"
-      - "traefik.http.routers.<unique-name>.tls.certResolver=letsencrypt"
-      - "traefik.http.services.<unique-name>.loadbalancer.server.port=3000"
+      - "traefik.http.routers.rag.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.rag.entrypoints=websecure"
+      - "traefik.http.routers.rag.tls.certResolver=letsencrypt"
+      - "traefik.http.services.rag.loadbalancer.server.port=3000"
     networks:
       - dokploy-network
 
